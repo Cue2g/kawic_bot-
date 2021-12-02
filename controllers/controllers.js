@@ -4,8 +4,7 @@ const func = require('./function.js')
 
 exports.split = async (ctx) => {
   responseText = ctx.update.message.text
-  let splitR = func.splitF(responseText,"/comisiones")
-  console.log(splitR);
+  let splitR = func.splitF(responseText,"/tarea")
 
   if(splitR === undefined){
     return ctx.reply('sin datos')
@@ -32,7 +31,8 @@ exports.split = async (ctx) => {
     grupo: ctx.update.message.chat.title,
     project:ctx.update.message.from.username,
     cantidad: splitR[2],
-    fecha: ctx.update.message.date.toString()
+    fecha: ctx.update.message.date.toString(),
+    cct_status:"draft"
   }
 
   let respuesta = await func.dataSend(body);

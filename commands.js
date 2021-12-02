@@ -7,7 +7,7 @@ module.exports = function(bot) {
     ctx.reply('"/comisiones @alias, tarea, Cantidad"')
   }))
 
-  bot.command('/comisiones',(ctx) => {
+  bot.command('/tarea',(ctx) => {
     si.split(ctx)
   })
 
