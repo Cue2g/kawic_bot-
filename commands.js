@@ -3,7 +3,7 @@ module.exports = function(bot) {
   const si= require('./controllers/controllers.js')
 
   bot.start((ctx => {
-    ctx.reply('Bienvenidos, para enviar la información se ejecuta con la siguiente estrucutra: \n \n /tarea @alias, tarea, Cantidad')
+    ctx.reply('Bienvenidos, para enviar la información se ejecuta con la siguiente estrucutra: \n \n /tarea @alias, Tarea, Cantidad, Grupo(opcional)')
   }))
 
   bot.command('/tarea',(ctx) => {
@@ -11,6 +11,6 @@ module.exports = function(bot) {
   })
 
   bot.command('/ayuda',(ctx) => {
-    ctx.reply('Para enviar la información se ejecuta con la siguiente estrucutra: \n \n /tarea @alias, tarea, Cantidad')
+    ctx.reply('Para enviar la información se ejecuta con la siguiente estrucutra: \n \n /tarea @alias, Tarea, Cantidad, Grupo(opcional) ')
   })
 }
