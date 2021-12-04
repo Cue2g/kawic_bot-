@@ -24,26 +24,28 @@ exports.split = async (ctx) => {
     return ctx.reply('Cantidad no ingresada')
   }
 
+  console.log(splitR[2]);
+
   const validarGrupo = (grupo) => {
     if(grupo === undefined){
       return {
           usuario: splitR[0].slice(1) ,
           tarea: splitR[1],
           grupo: ctx.update.message.chat.title,
-          project:ctx.update.message.from.username,
+          autor:ctx.update.message.from.username,
           cantidad: splitR[2],
           fecha: ctx.update.message.date.toString(),
-          cct_status:"draft"
+          cct_status:"publish"
       }
     }
     return {
         usuario: splitR[0].slice(1) ,
         tarea: splitR[1],
         grupo: grupo,
-        project:ctx.update.message.from.username,
+        autor:ctx.update.message.from.username,
         cantidad: splitR[2],
         fecha: ctx.update.message.date.toString(),
-        cct_status:"draft"
+        cct_status:"publish"
     }
   }
 
