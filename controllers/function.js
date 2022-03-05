@@ -10,7 +10,7 @@ dataFun.splitF = function (ctxText, command) {
 
 
 dataFun.dataSend = async function (body) {
-  const response = await fetch('httpddds://scc.ciwok.com/wp-json/jet-cct/comisiones_dec', {
+  const response = await fetch('https://scc.ciwok.com/wp-json/jet-cct/comisiones_dec', {
   	method: 'post',
   	body: JSON.stringify(body),
   	headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + process.env.CLIENT_TOKEN}
