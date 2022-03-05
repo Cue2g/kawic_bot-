@@ -1,8 +1,8 @@
 module.exports = function(bot) {
-  const tipoDeContenidoJson = require('./dataActividades/tipoDeContenido.json');
+  // const tipoDeContenidoJson = require('./dataActividades/tipoDeContenido.json');
   const tiposDeServicioJson = require('./dataActividades/tiposDeServicios.json');
   const allOptions = require('./dataActividades/AllOptions.json')
-  const tipoDeContenido = orderListMessage(tipoDeContenidoJson,2);
+  // const tipoDeContenido = orderListMessage(tipoDeContenidoJson,2);
   const tiposDeServicios = orderListMessage(tiposDeServicioJson, 2)
 
   const si = require('./controllers/controllers.js')
@@ -23,7 +23,7 @@ module.exports = function(bot) {
       }
 
       let some = gruposRegistred.some(res => res.idChat === idChat);
-      let data;
+
       if (some === false) {
         data = gruposRegistred.push({
           idChat: idChat,
@@ -61,6 +61,13 @@ module.exports = function(bot) {
 
   }))
 
+  bot.command('/tarea',(ctx) => {
+      si.tarea(ctx)
+  })
+
+  bot.command('/ayuda',(ctx) => {
+    ctx.reply('Opcion 1: Para enviar la información se ejecuta con la siguiente estrucutra:\n /tarea @alias, Tarea, Cantidad, Grupo(opcional) \n\n Opcion 2: Envia /start y luego seleciona enviar tarea. Será dirigido a un chat con el bot donde tiene que presionar start, luego seleccionar la actividad y por ultimo enviar el nombre y la cantidad.')
+  })
 
   bot.action('stopBot', ctx => {
     conditionToStopEaringMessages = true;
@@ -72,7 +79,7 @@ module.exports = function(bot) {
     const callbackQueryData = ctx.update.callback_query;
     const nameUser = callbackQueryData.from.username
     const idUser = callbackQueryData.from.id
-    const group = callbackQueryData.message.chat.title
+
     let someOption = optionsRegistred.some(res => res.idUser === idUser);
 
     conditionToStopEaringMessages = false;
@@ -123,7 +130,6 @@ module.exports = function(bot) {
           usersActives = usersActives.filter(res => res.idUser !== ctx.message.from.id);
           optionsRegistred = optionsRegistred.filter(res => res.idUser !== ctx.message.from.id);
         }
-
         console.log(usersActives);
       }
 

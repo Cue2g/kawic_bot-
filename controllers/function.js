@@ -2,9 +2,21 @@ const fetch = require('node-fetch')
 const dataFun = {}
 
 
-dataFun.splitF = function (ctxText, command) {
+dataFun.splitF = function (ctxText) {
   responseText = ctxText;
   resultArray = responseText.split(',')
+  return resultArray
+}
+
+dataFun.splitT = function (ctxText, command) {
+  responseText = ctxText;
+  textSplit = responseText.split(command + " ")
+  textArray = textSplit[1]
+
+  if(textArray === undefined){
+    return;
+  }
+  resultArray = textArray.split(',')
   return resultArray
 }
 
