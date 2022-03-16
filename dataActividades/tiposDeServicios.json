@@ -1,38 +1,58 @@
 [
-   "Social Media",
-   "Social Media con sesión de foto",
-   "Social  ads",
-   "Presupuesto para ads",
-   "Presupuesto para youtube ads",
-   "Sesión Fotográfica",
-   "Producción Audiovisual",
-   "Cobertura de evento con telefono",
-   "Pack de piezas para redes",
-   "Diseño de Logo",
-   "Naming",
-   "Manual de Identidad",
-   "Dominio y hosting",
-   "Diseño E-commerce",
-   "Diseño web corporativa",
-   "Diseño Landing Page",
-   "Copywriting",
-   "Mantenimiento web",
-   "Diseño de Modulo web",
-   "Diseño de Flyer",
-   "Diseño de Valla",
-   "Diseño de Backing",
-   "Diseño de franela",
-   "Diseño de Individuales",
-   "Diseño de Pendon",
-   "Diseño de Brazaletes",
-   "Diseño de Menu",
-   "Edición de Menu",
-   "Diseño de Croquis",
-   "Diseño de Afiche",
-   "Diseño de Panfleto",
-   "Diseño de Panfleto",
-   "Diseño de Packaging",
-   "Diseño de Whitepaper",
-   "Video Animado",
-   "Guion"
+  {
+    "name":"Post Diseñado",
+    "valor":1
+  },
+  {
+    "name":"Post Ilustrado",
+    "valor":3
+  },
+  {
+    "name":"Edición simple",
+    "valor":0.8
+  },
+  {
+    "name":"Edición con montaje",
+    "valor":1
+  },
+  {
+    "name":"Edición con diseño",
+    "valor":1
+  },
+  {
+    "name":"Video edición simple",
+    "valor":2.5
+  },
+  {
+    "name":"Video animado",
+    "valor":3
+  },
+  {
+    "name":"Video animado Ilustrado",
+    "valor":5
+  },
+  {
+    "name":"Reel edición simple",
+    "valor":1
+  },
+  {
+    "name":"Reel edición compleja",
+    "valor":2
+  },
+  {
+    "name":"Carrusel diseño (por pieza)",
+    "valor":0.5
+  },
+  {
+    "name":"Carrusel fotos editadas (por pieza)",
+    "valor":0.25
+  },
+  {
+    "name":"Storie",
+    "valor":0.5
+  },
+  {
+    "name":"gif",
+    "valor":0.1
+  }
 ]

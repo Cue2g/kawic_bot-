@@ -1,10 +1,8 @@
+const Groups = require('./models/grupos');
 module.exports = function(bot) {
-  // const tipoDeContenidoJson = require('./dataActividades/tipoDeContenido.json');
   const tiposDeServicioJson = require('./dataActividades/tiposDeServicios.json');
   const allOptions = require('./dataActividades/AllOptions.json')
-  // const tipoDeContenido = orderListMessage(tipoDeContenidoJson,2);
   const tiposDeServicios = orderListMessage(tiposDeServicioJson, 2)
-
   const si = require('./controllers/controllers.js')
   var conditionToStopEaringMessages = true;
   var usersActives = [];
@@ -12,9 +10,21 @@ module.exports = function(bot) {
   var optionsRegistred = [];
 
 
-  bot.start((ctx => {
+
+
+  bot.start((async ctx => {
     let idChat = ctx.update.message.chat.id
     let titleChat = ctx.update.message.chat.title
+
+        console.log(idChat)
+        console.log(titleChat)
+
+    if(ctx.update.message.chat.type === 'group'){
+      let searchResult = await validateGroup(idChat)
+      if(searchResult) {
+        return bot.telegram.sendMessage(ctx.chat.id, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
+      }
+    }
 
     if (ctx.startPayload === '') {
 
@@ -23,7 +33,6 @@ module.exports = function(bot) {
       }
 
       let some = gruposRegistred.some(res => res.idChat === idChat);
-
       if (some === false) {
         data = gruposRegistred.push({
           idChat: idChat,
@@ -31,12 +40,14 @@ module.exports = function(bot) {
         });
       }
 
+      console.log(data)
+
       return bot.telegram.sendMessage(ctx.chat.id, 'enviar tarea', {
         reply_markup: {
           inline_keyboard: [
             [{
               text: "Enviar tarea",
-              url: `https://t.me/Ciwokcobot?start=${idChat}`
+              url: `https://t.me/PiripichoPues_bot?start=${idChat}`
             }]
           ]
         }
@@ -61,11 +72,15 @@ module.exports = function(bot) {
 
   }))
 
-  bot.command('/tarea',(ctx) => {
-      si.tarea(ctx)
+  bot.command('/tarea', (ctx) => {
+    si.tarea(ctx);
   })
 
-  bot.command('/ayuda',(ctx) => {
+  bot.command('/agregarGrupo',(ctx) => {
+    si.agregarGrupo(ctx);
+  })
+
+  bot.command('/ayuda', (ctx) => {
     ctx.reply('Opcion 1: Para enviar la información se ejecuta con la siguiente estrucutra:\n /tarea @alias, Tarea, Cantidad, Grupo(opcional) \n\n Opcion 2: Envia /start y luego seleciona enviar tarea. Será dirigido a un chat con el bot donde tiene que presionar start, luego seleccionar la actividad y por ultimo enviar el nombre y la cantidad.')
   })
 
@@ -124,7 +139,7 @@ module.exports = function(bot) {
       let checkUser = usersActives.some(res => ctx.update.message.from.id === res.idUser)
       if (conditionToStopEaringMessages === false && checkUser === true) {
         let optionInfo = optionsRegistred.find(res => res.idUser === ctx.message.from.id);
-        let response = await si.split(ctx, optionInfo.option, optionInfo.nameUser, data, gruposRegistred);
+        let response = await si.split(ctx, optionInfo.option, optionInfo.nameUser, data, gruposRegistred, tiposDeServicioJson);
 
         if (response == true) {
           usersActives = usersActives.filter(res => res.idUser !== ctx.message.from.id);
@@ -140,12 +155,11 @@ module.exports = function(bot) {
 function orderListMessage(array, colum) {
   let response = array.map(val => {
     return {
-      text: val,
-      callback_data: val,
-      test: `Testing ${val}`
+      text: val.name,
+      callback_data: val.name,
+      test: `Testing ${val.name}`
     }
   })
-
 
   let arrayR = []
   response.forEach(res => {
@@ -161,4 +175,13 @@ function orderListMessage(array, colum) {
   });
 
   return arrayR
+}
+
+
+async function validateGroup(data) {
+  let response = await Groups.find({id:data});
+  if(response.length === 0){
+     return true
+  }
+  return false
 }
