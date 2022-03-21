@@ -52,7 +52,11 @@
     "valor":0.5
   },
   {
-    "name":"gif",
+    "name":"Gif",
     "valor":0.1
+  },
+  {
+    "name":"Sesion de Fotos",
+    "valor": 10
   }
 ]

@@ -1,8 +1,8 @@
 const Groups = require('./models/grupos');
 module.exports = function(bot) {
   const tiposDeServicioJson = require('./dataActividades/tiposDeServicios.json');
-  const allOptions = require('./dataActividades/AllOptions.json')
-  const tiposDeServicios = orderListMessage(tiposDeServicioJson, 2)
+  const allOptions = tiposDeServicioJson.map( res => res.name)
+  const tiposDeServicios = orderListMessage(tiposDeServicioJson, 3)
   const si = require('./controllers/controllers.js')
   var conditionToStopEaringMessages = true;
   var usersActives = [];
@@ -15,10 +15,6 @@ module.exports = function(bot) {
   bot.start((async ctx => {
     let idChat = ctx.update.message.chat.id
     let titleChat = ctx.update.message.chat.title
-
-        console.log(idChat)
-        console.log(titleChat)
-
     if(ctx.update.message.chat.type === 'group'){
       let searchResult = await validateGroup(idChat)
       if(searchResult) {
@@ -40,7 +36,6 @@ module.exports = function(bot) {
         });
       }
 
-      console.log(data)
 
       return bot.telegram.sendMessage(ctx.chat.id, 'enviar tarea', {
         reply_markup: {
@@ -156,8 +151,7 @@ function orderListMessage(array, colum) {
   let response = array.map(val => {
     return {
       text: val.name,
-      callback_data: val.name,
-      test: `Testing ${val.name}`
+      callback_data:val.name,
     }
   })
 

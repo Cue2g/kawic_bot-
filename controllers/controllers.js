@@ -5,10 +5,6 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 const func = require('./function.js')
 const Groups = require('../models/grupos')
 
-
-
-
-
 exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => {
   let datosUser = data
   let responseText = ctx.update.message.text
@@ -31,33 +27,39 @@ exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => 
     return ctx.reply('El formato de la cantidad no es un numero')
   }
 
-  let cantidad = splitR[1] * valorTarea;
-  let response = await Groups.find({id:nameGArray.idChat});
-  let valorGrupo = response[0].valor
-  let valorTotal = valorGrupo * cantidad
+  let valorTotal = 0;
+  if(option === 'Sesion de Fotos'){
+    let cantidad = splitR[1]
+    valorTotal = 10 * cantidad
+  }else{
+    let cantidad = splitR[1] * valorTarea;
+    let response = await Groups.find({id:nameGArray.idChat});
+    let valorGrupo = response[0].valor
+    valorTotal = valorGrupo * cantidad
+  }
+
 
   let body = {
     usuario: splitR[0].slice(1),
     tarea: option,
     grupo: nameGrupo,
     autor: nameUser,
-    cantidad: valorTotal.toFixed(2),
+    cantidad: splitR[1],
+    monto: valorTotal.toFixed(2),
     fecha: ctx.update.message.date.toString(),
     cct_status: "publish"
   }
 
-  ctx.reply(body)
-  // let respuesta = await func.dataSend(body);
-  //
-  // if (respuesta.success === true) {
-  //   bot.telegram.sendMessage(datosUser.idChat, `${nameUser} creo una tarea de: ${option} y fue asignada a @${splitR[0].slice(1)} `)
-  //   ctx.reply(`Registro Guardado con Exito!`)
-  //   return true
-  // } else {
-  //   ctx.reply(`Hubo un error al guardar el registro`)
-  //   console.log(respuesta);
-  //   return false
-  // }
+  let respuesta = await func.dataSend(body);
+  if (respuesta.success === true) {
+    bot.telegram.sendMessage(datosUser.idChat, `${nameUser} creo una tarea de: ${option} y fue asignada a @${splitR[0].slice(1)} `)
+    ctx.reply(`Registro Guardado con Exito!`)
+    return true
+  } else {
+    ctx.reply(`Hubo un error al guardar el registro`)
+    console.log(respuesta);
+    return false
+  }
 
 }
 
@@ -124,8 +126,6 @@ exports.tarea = async (ctx) => {
   if (splitR[2] === undefined) {
     return ctx.reply('Cantidad no ingresada')
   }
-
-  console.log(splitR[2]);
 
   const validarGrupo = (grupo) => {
     if (grupo === undefined) {
