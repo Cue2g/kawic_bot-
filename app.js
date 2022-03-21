@@ -4,10 +4,10 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 const mongoose = require('mongoose');
 const commands = require('./commands.js')
 
-// const userbd = process.env.USER,
-//         pwbd = process.env.PW,
-//       bdname = `cibotdata`;
-const uri = `mongodb+srv://ciBotApi:IYq8J50Tagk5D2Pz@cluster0.4qxcs.mongodb.net/cibotdata?retryWrites=true&w=majority`;
+const userbd = 'ciBotApi',
+        pwbd = 'qXSJZu40GjFE8GhZ',
+      bdname = `cibotdata`;
+const uri = `mongodb+srv://${userbd}:${pwbd}@cluster0.4qxcs.mongodb.net/${bdname}?retryWrites=true&w=majority`;
 
 commands(bot)
 
