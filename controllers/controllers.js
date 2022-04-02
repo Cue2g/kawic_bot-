@@ -11,7 +11,17 @@ exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => 
   let valorFind = groups.find(res => res.name === option);
   let valorTarea = valorFind.valor
   let nameGArray = gruposRegistred.find(res => res.idChat === datosUser.idChat)
-  let nameGrupo = nameGArray.titleChat
+  console.log('name')
+  console.log(nameGArray)
+  if(nameGArray === []){
+    return ctx.reply('Error en el registro. Ingrese /start en el grupo correspondiente e inicie el proceso nuevamente')
+  }
+
+  let nameGrupo = nameGArray.titleChat ? nameGArray.titleChat : undefined;
+
+  if(nameGrupo === undefined){
+    return ctx.reply('hubo un error a la hora de obtener el nombre del grupo, inicie el proceso nuevamente.')
+  }
   let splitR = func.splitF(responseText)
   let userMenition = splitR[0].charAt(0)
 
@@ -34,6 +44,10 @@ exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => 
   }else{
     let cantidad = splitR[1] * valorTarea;
     let response = await Groups.find({id:nameGArray.idChat});
+    console.log(response)
+    if(response === []){
+      return ctx.reply('error al capturar el valor del grupo, por favor inicie el proceso nuevamente.')
+    }
     let valorGrupo = response[0].valor
     valorTotal = valorGrupo * cantidad
   }
@@ -60,6 +74,13 @@ exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => 
     console.log(respuesta);
     return false
   }
+
+ //  only debugger
+
+ //  bot.telegram.sendMessage(datosUser.idChat, body)
+ //  console.log(body)
+ // ctx.reply(`Registro Guardado con Exito!`)
+
 
 }
 

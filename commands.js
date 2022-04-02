@@ -2,7 +2,7 @@ const Groups = require('./models/grupos');
 module.exports = function(bot) {
   const tiposDeServicioJson = require('./dataActividades/tiposDeServicios.json');
   const allOptions = tiposDeServicioJson.map( res => res.name)
-  const tiposDeServicios = orderListMessage(tiposDeServicioJson, 3)
+  const tiposDeServicios = orderListMessage(tiposDeServicioJson, 2)
   const si = require('./controllers/controllers.js')
   var conditionToStopEaringMessages = true;
   var usersActives = [];
@@ -42,12 +42,13 @@ module.exports = function(bot) {
           inline_keyboard: [
             [{
               text: "Enviar tarea",
-              url: `https://t.me/PiripichoPues_bot?start=${idChat}`
+              url: `https://t.me/Ciwokcobot?start=${idChat}`
             }]
           ]
         }
       })
     }
+
     let idUser = ctx.message.from.id
     let groupId = ctx.startPayload
     let checkUser = usersActives.some(res => res.idUser === idUser)
@@ -67,9 +68,9 @@ module.exports = function(bot) {
 
   }))
 
-  bot.command('/tarea', (ctx) => {
-    si.tarea(ctx);
-  })
+  // bot.command('/tarea', (ctx) => {
+  //   si.tarea(ctx);
+  // })
 
   bot.command('/agregarGrupo',(ctx) => {
     si.agregarGrupo(ctx);
@@ -141,6 +142,7 @@ module.exports = function(bot) {
           optionsRegistred = optionsRegistred.filter(res => res.idUser !== ctx.message.from.id);
         }
         console.log(usersActives);
+        console.log(gruposRegistred)
       }
 
     });
