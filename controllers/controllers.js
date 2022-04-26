@@ -61,7 +61,8 @@ exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => 
     cantidad: splitR[1],
     monto: valorTotal.toFixed(2),
     fecha: ctx.update.message.date.toString(),
-    cct_status: "publish"
+    cct_status: "publish",
+    tipo_de_pago:"tarea"
   }
 
   let respuesta = await func.dataSend(body);
