@@ -85,7 +85,7 @@ module.exports = function(bot) {
 
   bot.command('/tarea', (ctx) => {
     si.tarea(ctx);
-  })
+  }) 
 
   bot.command('/agregarGrupo',(ctx) => {
     si.agregarGrupo(ctx);
