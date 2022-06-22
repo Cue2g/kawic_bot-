@@ -1,7 +1,11 @@
 const Groups = require('./models/grupos');
+
 const {Telegraf} =  require('telegraf');
+
 const botlog = new Telegraf('5321920688:AAE64qi6LDimzxr-aaQjWUbr1U0IVLMCBew');
+
 module.exports = function(bot) {
+
   const tiposDeServicioJson = require('./dataActividades/tiposDeServicios.json');
   const allOptions = tiposDeServicioJson.map( res => res.name)
   const tiposDeServicios = orderListMessage(tiposDeServicioJson, 2)
@@ -15,42 +19,62 @@ module.exports = function(bot) {
 
 
   bot.start((async ctx => {
+
+    const messageChatId     = ctx.update.message.chat.id;
+    const messageChatTittle = ctx.update.message.chat.title;
+    const messageChatType   = ctx.update.message.chat.type;
+    const messageFromId     = ctx.update.message.from.id;
+
+    const chatId = ctx.chat.id
+
+    const startPayload = ctx.startPayload === '' ? true : false;
+
+    console.log({
+      messageChatId,
+      messageChatTittle,
+      messageChatType,
+      startPayload,
+    })
+
     try {
-      let idChat = ctx.update.message.chat.id
-      let titleChat = ctx.update.message.chat.title
-      if(ctx.update.message.chat.type === 'group'){
-        let searchResult = await validateGroup(idChat)
-        if(searchResult) {
-          return bot.telegram.sendMessage(ctx.chat.id, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
+
+      if(messageChatType === 'group'){
+        const searchResult = await validateGroup(messageChatId);
+        console.log(searchResult)
+        if(!searchResult) {
+          return bot.telegram.sendMessage(chatId, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
         }
       }
 
-      if (ctx.startPayload === '') {
-        if (ctx.update.message.from.id === ctx.update.message.chat.id) {
-          return ctx.reply('Este mensaje solo funciona desde un grupo')
+
+      if (startPayload) {
+
+        if (messageFromId === messageChatId) {
+          return ctx.reply('Este mensaje solo funciona desde un grupo');
         }
 
-        let searchResult = await validateGroup(idChat)
+        const searchResult = await validateGroup(messageChatId);
 
-        if(searchResult) {
-          return bot.telegram.sendMessage(ctx.chat.id, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
+        if(!searchResult) {
+          return bot.telegram.sendMessage(chatId, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
         }
 
-        let some = gruposRegistred.some(res => res.idChat === idChat);
-        if (some === false) {
+        const some = gruposRegistred.some(res => res.idChat === messageChatId);
+        return console.log({some})
+        if (!some) {
           data = gruposRegistred.push({
-            idChat: idChat,
-            titleChat: titleChat
+            messageChatId: messageChatId,
+            messageChatTittle: messageChatTittle
           });
         }
 
 
-        return bot.telegram.sendMessage(ctx.chat.id, 'enviar tarea', {
+        return bot.telegram.sendMessage(chatId, 'enviar tarea', {
           reply_markup: {
             inline_keyboard: [
               [{
                 text: "Enviar tarea",
-                url: `https://t.me/Ciwokcobot?start=${idChat}`
+                url: `https://t.me/Ciwokcobot?start=${messageChatId}`
               }]
             ]
           }
@@ -63,7 +87,7 @@ module.exports = function(bot) {
       if (checkUser === false) {
         usersActives.push({
           idUser: idUser,
-          idChat: Number(groupId)
+          messageChatId: Number(groupId)
         })
       }
 
@@ -201,9 +225,7 @@ function orderListMessage(array, colum) {
 
 
 async function validateGroup(data) {
-  let response = await Groups.find({id:data});
-  if(response.length === 0){
-     return true
-  }
-  return false
+  const response = await Groups.find({id:data});
+  const validate = response.length > 0 ? true : false;
+  return validate
 }
