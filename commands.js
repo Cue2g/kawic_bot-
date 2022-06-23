@@ -1,4 +1,5 @@
 const Groups = require('./models/grupos');
+const UserActives = require('./models/userActives')
 
 const {Telegraf} =  require('telegraf');
 
@@ -19,14 +20,12 @@ module.exports = function(bot) {
 
 
   bot.start((async ctx => {
-
+    const date = new Date().toISOString();
     const messageChatId     = ctx.update.message.chat.id;
     const messageChatTittle = ctx.update.message.chat.title;
     const messageChatType   = ctx.update.message.chat.type;
     const messageFromId     = ctx.update.message.from.id;
-
     const chatId = ctx.chat.id
-
     const startPayload = ctx.startPayload === '' ? true : false;
 
     console.log({
@@ -46,7 +45,6 @@ module.exports = function(bot) {
         }
       }
 
-
       if (startPayload) {
 
         if (messageFromId === messageChatId) {
@@ -59,13 +57,18 @@ module.exports = function(bot) {
           return bot.telegram.sendMessage(chatId, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
         }
 
-        const some = gruposRegistred.some(res => res.idChat === messageChatId);
-        return console.log({some})
-        if (!some) {
-          data = gruposRegistred.push({
-            messageChatId: messageChatId,
-            messageChatTittle: messageChatTittle
-          });
+        const searchActives = await validateActives(messageChatId);
+
+        if (!searchActives) {
+
+          const data = {
+            messageChatId,
+            messageChatTittle,
+            dateRegister: date
+          }
+
+          const userActivesDB = new UserActives(data)
+          await userActivesDB.save()
         }
 
 
@@ -74,24 +77,24 @@ module.exports = function(bot) {
             inline_keyboard: [
               [{
                 text: "Enviar tarea",
-                url: `https://t.me/Ciwokcobot?start=${messageChatId}`
+                url: `https://t.me/azabache_bot?start=${messageChatId}`
               }]
             ]
           }
         })
       }
 
-      let idUser = ctx.message.from.id
-      let groupId = ctx.startPayload
-      let checkUser = usersActives.some(res => res.idUser === idUser)
-      if (checkUser === false) {
-        usersActives.push({
-          idUser: idUser,
-          messageChatId: Number(groupId)
-        })
-      }
+      // const idUser = ctx.message.from.id
+      // let groupId = ctx.startPayload
+      // let checkUser = usersActives.some(res => res.idUser === idUser)
+      // if (checkUser === false) {
+      //   usersActives.push({
+      //     idUser: idUser,
+      //     messageChatId: Number(groupId)
+      //   })
+      // }
 
-      bot.telegram.sendMessage(ctx.chat.id, 'Listado de tareas por Tipos de servicio', {
+      bot.telegram.sendMessage(chatId, 'Listado de tareas por Tipos de servicio', {
         reply_markup: {
           inline_keyboard: tiposDeServicios
         }
@@ -224,8 +227,14 @@ function orderListMessage(array, colum) {
 }
 
 
-async function validateGroup(data) {
-  const response = await Groups.find({id:data});
+async function validateGroup(id) {
+  const response = await Groups.find({id:id});
+  const validate = response.length > 0 ? true : false;
+  return validate
+}
+
+async function validateActives(messageChatId) {
+  const response = await UserActives.find({messageChatId:messageChatId});
   const validate = response.length > 0 ? true : false;
   return validate
 }

@@ -101,40 +101,47 @@ cantidad:${body.cantidad} `)
 
 exports.agregarGrupo = async (ctx) => {
   try {
-    let text = ctx.update.message.text
-    let responseGroup = await Groups.find({id:ctx.chat.id});
+    const messageText = ctx.update.message.text
+    const chatId = ctx.chat.id
+    const chatTitle = ctx.chat.title
+
+    const responseGroup = await Groups.find({id:chatId});
 
     if(responseGroup.length != 0){
        return ctx.reply(`El grupo ya esta registrado`)
     }
 
-    let splitFun = text.split(`/agregarGrupo `)
-
+    const splitFun = messageText.split(`/agregarGrupo `)
+   
     if (splitFun.length < 2) {
       return ctx.reply(`El valor se encuentra vacio`)
     }
 
-    let valor = splitFun[1].split(" ")
+    const valor = splitFun[1].split(" ")
     if (valor.length > 1) {
       return ctx.reply(`El formato del valor es incorrecto`)
     }
 
 
-    let typeValor = isNaN(valor[0]);
+    const typeValor = isNaN(valor[0]);
     if (typeValor) {
       return ctx.reply(`El formato del valor es incorrecto`)
     }
 
-    let valorGroup = valor[0]
+    const valorGroup = valor[0]
 
-    let data = {
+    const data = {
       valor: valorGroup,
-      id: ctx.chat.id,
-      tittle: ctx.chat.title
+      id: chatId,
+      chatTitle
     }
+
     const groupDB = new Groups(data)
+
     await groupDB.save()
+
     return ctx.reply(`Se a guardado el grupo con exito`)
+    
   } catch (e) {
     const date = new Date();
     botlog.telegram.sendMessage(100799949,{
