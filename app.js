@@ -1,13 +1,14 @@
-require('dotenv').config()
+require('dotenv').config();
 const {Telegraf} =  require('telegraf');
-const bot = new Telegraf(process.env.BOT_TOKEN)
-const botlog = new Telegraf('5321920688:AAE64qi6LDimzxr-aaQjWUbr1U0IVLMCBew');
+const bot = new Telegraf(process.env.BOT_TOKEN);
+const botlog = new Telegraf(process.env.BOT_TOKEN_LOG);
 const mongoose = require('mongoose');
-const commands = require('./commands.js')
+const commands = require('./commands.js');
 
-const userbd = 'ciBotApi',
-        pwbd = 'qXSJZu40GjFE8GhZ',
-      bdname = `cibotdata`;
+const userbd = process.env.USER,
+        pwbd = process.env.PW,
+      bdname = process.env.BDNAME;
+
 const uri    = `mongodb+srv://${userbd}:${pwbd}@cluster0.4qxcs.mongodb.net/${bdname}?retryWrites=true&w=majority`;
 
 commands(bot)
