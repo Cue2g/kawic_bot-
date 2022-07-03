@@ -8,100 +8,6 @@ const botlog = new Telegraf(process.env.BOT_TOKEN_LOG);
 const UserActives = require('../models/userActives');
 const tiposDeServicioJson = require('../dataActividades/tiposDeServicios.json');
 
-
-exports.split = async (ctx, option, nameUser, data, gruposRegistred, groups) => {
- try {
-   let datosUser = data
-   let responseText = ctx.update.message.text
-   let valorFind = groups.find(res => res.name === option);
-   let valorTarea = valorFind.valor
-   let nameGArray = gruposRegistred.find(res => res.idChat === datosUser.idChat)
-   console.log(nameGArray)
-   if(nameGArray === []){
-     return ctx.reply('Error en el registro. Ingrese /start en el grupo correspondiente e inicie el proceso nuevamente')
-   }
-
-   let nameGrupo = nameGArray.titleChat ? nameGArray.titleChat : undefined;
-
-   if(nameGrupo === undefined){
-     return ctx.reply('hubo un error a la hora de obtener el nombre del grupo, inicie el proceso nuevamente.')
-   }
-   let splitR = func.splitF(responseText)
-   let userMenition = splitR[0].charAt(0)
-
-   if (userMenition != '@') {
-     return ctx.reply('ingrese un usuario valido')
-   }
-
-   if (splitR[1] === undefined) {
-     return ctx.reply('Cantidad no ingresada')
-   }
-
-   if (isNaN(splitR[1])) {
-     return ctx.reply('El formato de la cantidad no es un numero')
-   }
-
-   let valorTotal = 0;
-   if(option === 'Sesion de Fotos'){
-     let cantidad = splitR[1]
-     valorTotal = 10 * cantidad
-   }else{
-     let cantidad = splitR[1] * valorTarea;
-     let response = await Groups.find({id:nameGArray.idChat});
-
-     if(response === []){
-       return ctx.reply('error al capturar el valor del grupo, por favor inicie el proceso nuevamente.')
-     }
-     let valorGrupo = response[0].valor
-     valorTotal = valorGrupo * cantidad
-   }
-
-   let body = {
-     usuario: splitR[0].slice(1),
-     tarea: option,
-     grupo: nameGrupo,
-     autor: nameUser,
-     cantidad: splitR[1],
-     monto: valorTotal.toFixed(2),
-     fecha: ctx.update.message.date.toString(),
-     cct_status: "publish",
-     tipo_de_pago:"tarea"
-   }
-
-   let respuesta = await func.dataSend(body);
-   if (respuesta.success === true) {
-
-     bot.telegram.sendMessage(datosUser.idChat, `@${nameUser} creo una tarea de:
-${option}
-Fue asignada a @${splitR[0].slice(1)}
-cantidad:${body.cantidad} `)
-
-     ctx.reply(`Registro Guardado con Exito!`)
-     return true
-   } else {
-     ctx.reply(`Hubo un error al guardar el registro`)
-     console.log(respuesta);
-     return false
-   }
-
-  //  only debugger
-
-  //  bot.telegram.sendMessage(datosUser.idChat, body)
-  //  console.log(body)
-  // ctx.reply(`Registro Guardado con Exito!`)
-
-
- } catch (e) {
-   const date = new Date();
-   botlog.telegram.sendMessage(100799949,{
-     error:e.message,
-     parte:'split',
-     fecha: date
-   })
-   return ctx.reply('error al capturar el valor del grupo, por favor inicie el proceso nuevamente.')
- }
-}
-
 exports.sendData = async(userIdText, text, ctx) => {
   try {
 
@@ -121,7 +27,7 @@ exports.sendData = async(userIdText, text, ctx) => {
       return ctx.reply('ingrese un usuario valido')
     }
     
-    console.log(splitR[1])
+
     if (splitR[1] === undefined) {
       return ctx.reply('Cantidad no ingresada')
     }
@@ -169,7 +75,6 @@ exports.sendData = async(userIdText, text, ctx) => {
       return true
     } else {
       ctx.reply(`Hubo un error al guardar el registro`)
-      console.log(respuesta);
       return false
     }
   } catch (error) {
@@ -185,9 +90,6 @@ exports.agregarGrupo = async (ctx) => {
     const messageFromId = ctx.update.message.from.id;
     const messageFromUsername = ctx.update.message.from.username
     const date = new Date()
-
-
-   
 
     const responseGroup = await Groups.find({id:chatId});
 
@@ -224,7 +126,6 @@ exports.agregarGrupo = async (ctx) => {
       idRegistered: messageFromId
     }
 
-    console.log(data)
 
   
     const groupDB = new Groups(data)
