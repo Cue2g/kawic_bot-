@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserActivesSchema = new Schema({
-  messageChatId: String,
-  messageChatTittle: String,
-  dateRegister: Date
+  userID: Number,
+  userUsername: String,
+  groupID: Number,
+  option: {
+    type: String,
+    default: 'none'
+  },
+  dateActive: Date
 });
 
 UserActivesSchema.index({messageChatId:1});
