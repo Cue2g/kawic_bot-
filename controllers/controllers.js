@@ -1,16 +1,16 @@
 const {
   Telegraf
 } = require('telegraf');
-const bot = new Telegraf(process.env.BOT_TOKEN)
-const func = require('./function.js')
-const Groups = require('../models/grupos')
+const bot = new Telegraf(process.env.BOT_TOKEN);
+const func = require('./function.js');
+const Groups = require('../models/grupos');
 const botlog = new Telegraf(process.env.BOT_TOKEN_LOG);
 const UserActives = require('../models/userActives');
 const tiposDeServicioJson = require('../dataActividades/tiposDeServicios.json');
 
 exports.sendData = async(userIdText, text, ctx) => {
+  
   try {
-
     const dataUser = await dataActiveUser(userIdText);
     const user = dataUser[0];
     const option = user.option
@@ -20,20 +20,21 @@ exports.sendData = async(userIdText, text, ctx) => {
     const userMenition = splitR[0].charAt(0)
     const valorFind = tiposDeServicioJson.find(servicio => servicio.name === option);
     const valorTarea = valorFind.valor
-    
-  
- 
+
     if (userMenition != '@') {
-      return ctx.reply('ingrese un usuario valido')
+      ctx.reply('ingrese un usuario valido');
+      return false
     }
     
 
     if (splitR[1] === undefined) {
-      return ctx.reply('Cantidad no ingresada')
+      ctx.reply('Cantidad no ingresada')
+      return false
     }
  
     if (isNaN(splitR[1])) {
-      return ctx.reply('El formato de la cantidad no es un numero')
+      ctx.reply('El formato de la cantidad no es un numero')
+      return false
     }
 
     const valorEnviadoUser = splitR[1]

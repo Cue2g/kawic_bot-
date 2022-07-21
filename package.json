@@ -5,16 +5,20 @@
     "node-cron": "^3.0.1",
     "node-fetch": "^2.6.6",
     "nodemon": "^2.0.15",
-    "telegraf": "^4.4.2"
+    "telegraf": "^4.4.2",
+    "uuid": "^8.3.2"
   },
   "name": "kowic_bot",
   "version": "1.0.3",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "cue2g",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/uuid": "^8.3.4"
+  }
 }

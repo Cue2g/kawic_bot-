@@ -4,8 +4,10 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 const botlog = new Telegraf(process.env.BOT_TOKEN_LOG);
 const mongoose = require('mongoose');
 const commands = require('./commands.js');
+const cron = require('node-cron');
+const jobs = require('./jobs');
 
-const userbd = process.env.USER,
+const userbd = process.env.USERBD,
         pwbd = process.env.PW,
       bdname = process.env.BDNAME;
 
@@ -18,6 +20,9 @@ mongoose.connect(uri)
   .then(() => {
     bot.launch()
     botlog.launch()
+    cron.schedule('*/1 * * * *', () => {
+      jobs.userActivesCheck(bot)
+    });
     console.log('Bot Ready');
   })
   .catch( e => console.log(
@@ -26,3 +31,5 @@ mongoose.connect(uri)
         data: e
     }
   ));
+
+  

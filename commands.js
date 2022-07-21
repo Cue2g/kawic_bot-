@@ -24,7 +24,6 @@ module.exports = function(bot) {
 
       if(messageChatType === 'group'){
         const searchResult = await validateGroup(messageChatId);
-        console.log(searchResult)
         if(!searchResult) {
           return bot.telegram.sendMessage(chatId, 'El grupo no esta registrado. Para agregarlo envie el comando /agregarGrupo seguido del valor de la unidad')
         }
@@ -134,12 +133,13 @@ module.exports = function(bot) {
         const messageTextText = ctx.update.message.text
         const idUserOnText = ctx.message.from.id
         const searchActives = await validateActives(callbackFromid);
-
+        
         if (!searchActives) {
-          return
+          return 
         }
 
         if (messageFromIdText != messageChatIdText) {
+
           return
         }
 
