@@ -80,13 +80,7 @@ module.exports = function(bot) {
       })
 
     } catch (e) {
-      const date = new Date();
-      botlog.telegram.sendMessage(100799949,{
-        error:e.message,
-        parte:'split',
-        fecha: date
-      })
-      console.log(e)
+      botlog.telegram.sendMessage(100799949,`Error at command - start: ${e.message}`);
     }
   }))
 
@@ -150,13 +144,7 @@ module.exports = function(bot) {
         return 
       });
     } catch (e) {
-      const date = new Date();
-      botlog.telegram.sendMessage(100799949,{
-        error:e.message,
-        parte:'split',
-        fecha: date
-      })
-      console.log(e)
+      botlog.telegram.sendMessage(100799949,`Error at command - action: ${e.message}`);
     }
   })
 }

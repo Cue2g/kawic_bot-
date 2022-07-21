@@ -1,0 +1,23 @@
+jobs.script = async () => {
+    const M = mongoose.model('groups', mongoose.Schema({}, { strict: false }), 'groups');
+    const response = await M.find({}).select({_id:0}).lean();
+    
+    response.forEach(async (group) => {
+        const responseGroup = await Groups.find({id:group.id});
+        if(responseGroup.length === 0){
+            const date = Date.now()
+            const data = {
+                id:group.id,
+                name: group.tittle,
+                valor: group.valor,
+                dateRegistered: date,
+                nameRegistered: 'Cue2g',
+                idRegistered: 100799949
+              }
+            const groupDB = new Groups(data)
+            await groupDB.save()
+            console.log(data)
+        }
+    })
+
+}

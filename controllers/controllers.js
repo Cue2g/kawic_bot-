@@ -78,8 +78,8 @@ exports.sendData = async(userIdText, text, ctx) => {
       ctx.reply(`Hubo un error al guardar el registro`)
       return false
     }
-  } catch (error) {
-    
+  } catch (e) {
+    botlog.telegram.sendMessage(100799949,`Error at controllers - sendData: ${e.message}`);
   }
 }
 
@@ -136,12 +136,7 @@ exports.agregarGrupo = async (ctx) => {
     return ctx.reply(`Se a guardado el grupo con exito`)
     
   } catch (e) {
-    const date = new Date();
-    botlog.telegram.sendMessage(100799949,{
-      error:e.message,
-      parte:'split',
-      fecha: date
-    })
+    botlog.telegram.sendMessage(100799949,`Error at command - agregarGrupo: ${e.message}`);
     return ctx.reply(`Error al guardar el grupo`)
   }
 }
@@ -202,12 +197,7 @@ exports.tarea = async (ctx) => {
       return ctx.reply(`Hubo un error al guardar el registro`)
     }
   } catch (e) {
-    const date = new Date();
-    botlog.telegram.sendMessage(100799949,{
-      error:e.message,
-      parte:'split',
-      fecha: date
-    })
+    botlog.telegram.sendMessage(100799949,`Error at command - tarea: ${e.message}`);
     return ctx.reply(`Hubo un error al guardar el registro`)
   }
 }
