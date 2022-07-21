@@ -63,7 +63,7 @@ exports.sendData = async(userIdText, text, ctx) => {
       cct_status: "publish",
       tipo_de_pago:"tarea"
     };
-
+    ctx.reply('Enviando informacion...');
     const respuesta = await func.dataSend(body);
 
     if (respuesta.success === true) {
