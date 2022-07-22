@@ -107,14 +107,14 @@ module.exports = function(bot) {
       const searchActives = await validateActives(callbackFromid);
       
       if(!searchActives){
-        await ctx.deleteMessage()
+        await ctx.deleteMessage().then((response) => response, ({ response }) => response.ok)
         return  
       }
 
       await UserActives.findOneAndUpdate({userID:callbackFromid }, {option: option});
       conditionToStopEaringMessages = false;
       
-      await ctx.deleteMessage()
+      await ctx.deleteMessage().then((response) => response, ({ response }) => response.ok)
 
       ctx.reply(`>>>Ha seleccionado: ${option}<<<
 
