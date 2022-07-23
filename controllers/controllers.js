@@ -12,9 +12,19 @@ exports.sendData = async(userIdText, text, ctx) => {
   
   try {
     const dataUser = await dataActiveUser(userIdText);
+    if (!dataUser) {
+      ctx.reply('Error al obtener el usuario Activo');
+      return false
+    }
     const user = dataUser[0];
     const option = user.option
+
     const dataGrupoUser = await dataGrupo(user.groupID);
+
+    if (!dataGrupoUser) {
+      ctx.reply('Error al obtener los datos del grupo');
+      return false
+    }
     const group = dataGrupoUser[0];
     const splitR = func.splitF(text)
     const userMenition = splitR[0].charAt(0)
@@ -203,11 +213,19 @@ exports.tarea = async (ctx) => {
 }
 
 async function dataActiveUser(messageChatId) {
-  const response = await UserActives.find({messageChatId:messageChatId});
-  return response
+  try {
+    const response = await UserActives.find({messageChatId:messageChatId});
+    return response
+  } catch (error) {
+    return false
+  }
 }
 
 async function dataGrupo(idGrupo){
-  const response = await Groups.find({id:idGrupo});
-  return response
+  try {
+    const response = await Groups.find({id:idGrupo});
+    return response
+  } catch (error) {
+    return false
+  }
 }
